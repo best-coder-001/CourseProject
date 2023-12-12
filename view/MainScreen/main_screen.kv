@@ -1,0 +1,27 @@
+<FloatLayoutWithElevation@MDFloatLayout+CommonElevationBehavior>:
+
+<MainScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDBoxLayout:
+        MDBoxLayout:
+            md_bg_color: '#266582'
+
+    FloatLayoutWithElevation:
+        id: form
+        size_hint: None,None
+        size: '500dp','600dp'
+        md_bg_color: 'white'
+        pos_hint: {'center_x': 0.5,'center_y': 0.5}
+#        md_bg_color: ''
+        radius: 12, 46, 12, 46
+        elevation: 3
+        shadow_softness: 10
+        MDBoxLayout:
+            pos_hint: form.pos_hint
+            size: form.size
+            radius: form.radius
+            MDScreenManager:
+                id: auth_screens
+
+

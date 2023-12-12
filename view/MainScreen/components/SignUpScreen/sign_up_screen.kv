@@ -1,0 +1,74 @@
+<SignUpScreen>:
+    MDBoxLayout:
+        padding: '10dp'
+        spacing: '10dp'
+        orientation: 'vertical'
+        Image:
+            size_hint: 1,0.3
+            source: 'default.jpg'
+            allow_stretch: True
+        MDBoxLayout:
+            size_hint: 1,0.7
+            orientation: 'vertical'
+            MDLabel:
+                text: 'Регистрация'
+                size_hint: 1,None
+                height: '30dp'
+                font_name: 'bubble_words'
+                font_size: '30dp'
+                halign: 'center'
+            MDGridLayout:
+                id: wrapper
+                padding: '10dp','5dp','10dp','5dp'
+                spacing: '10dp'
+                cols: 2
+                rows: 2
+                MDTextField:
+                    id: username
+                    mode: 'rectangle'
+                    hint_text: 'Придумайте логин'
+                    icon_left: 'account'
+                MDTextField:
+                    id: password
+                    mode: 'rectangle'
+                    hint_text: 'Придумайте пароль'
+                    icon_left: 'key'
+                    password: True
+                MDTextField:
+                    id: email
+                    mode: 'rectangle'
+                    hint_text: 'Почта'
+                    icon_left: 'email'
+                MDTextField:
+                    id: phone_number
+                    mode: 'rectangle'
+                    hint_text: 'Номер телефона'
+                    icon_left: 'phone'
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: wrapper.padding
+                MDRaisedButton:
+                    size_hint: password.size_hint
+                    text: 'Регистрация'
+                    font_name: 'bubble_words'
+                    pos_hint: {'top': 1}
+                    on_release: root.controller.sign_in_user()
+
+                MDFloatLayout:
+                    MDFloatLayout:
+                        size_hint: 1, None
+                        height: '50dp'
+                        pos_hint: {'center_x': 0.5, 'center_y': 0.5}
+
+                        MDLabel:
+                            text: 'Уже зарегистрированы?'
+                            pos_hint: {'center_x': 0.66, 'center_y': 0.5}
+
+                        MDTextButton:
+                            text: 'Авторизоваться.'
+                            theme_text_color: "Custom"
+                            text_color: '#083080'
+                            pos_hint: {'center_x': 0.7, 'center_y': 0.5}
+                            on_release:
+                                root.auth_screens_manager.current = 'LoginScreen'

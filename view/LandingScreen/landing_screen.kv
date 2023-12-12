@@ -1,0 +1,35 @@
+<LandingScreen>:
+    MDBoxLayout:
+        padding: '10dp'
+        spacing: '10dp'
+
+        MDBoxLayout:
+            size_hint: None,1
+            width: '70dp'
+            orientation: 'vertical'
+            md_bg_color: '#0c48c2'
+
+            radius: 15
+            MDBoxLayout:
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: '5dp'
+                spacing: '10dp'
+                pos_hint: {'center_x': 0.5}
+                id: menu_wrapper
+                MDIconButton:
+                    icon: 'account'
+                    pos_hint: menu_wrapper.pos_hint
+                MDIconButton:
+                    icon: 'database-edit-outline'
+                    pos_hint: menu_wrapper.pos_hint
+                MDIconButton:
+                    icon: 'cog-outline'
+                    pos_hint: menu_wrapper.pos_hint
+                MDIconButton:
+                    icon: 'arrow-left'
+                    pos_hint: menu_wrapper.pos_hint
+            MDBoxLayout:
+        MDBoxLayout:
+            md_bg_color: '#0c48c2'
+            radius: 15

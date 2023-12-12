@@ -1,0 +1,67 @@
+<LoginScreen>:
+    MDBoxLayout:
+        padding: '10dp'
+        spacing: '10dp'
+        orientation: 'vertical'
+        Image:
+            size_hint: 1,0.3
+            source: 'branding.png'
+            allow_stretch: True
+        MDBoxLayout:
+            size_hint: 1,0.7
+            orientation: 'vertical'
+            MDLabel:
+                text: 'Логин'
+                size_hint: 1,None
+                height: '30dp'
+                font_name: 'bubble_words'
+                font_size: '30dp'
+                halign: 'center'
+            MDBoxLayout:
+                id: wrapper
+                orientation: 'vertical'
+                padding: '30dp','10dp','30dp','10dp'
+                spacing: '10dp'
+                MDTextField:
+                    id: username
+                    mode: 'rectangle'
+                    hint_text: 'Логин'
+                    icon_left: 'account'
+                MDTextField:
+                    id: password
+                    mode: 'rectangle'
+                    hint_text: 'Пароль'
+                    icon_left: 'key'
+                    password: True
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: wrapper.padding
+                MDRaisedButton:
+                    size_hint: password.size_hint
+                    text: 'Логин'
+                    font_name: 'bubble_words'
+                    pos_hint: {'top': 1}
+                    on_release:
+                        root.controller.login()
+
+                MDFloatLayout:
+                    MDFloatLayout:
+                        size_hint: 1, None
+                        height: '50dp'
+                        pos_hint: {'center_x': 0.45, 'center_y': 0.5}
+
+                        MDLabel:
+                            text: 'Нет аккаунта?'
+                            pos_hint: {'center_x': 0.76, 'center_y': 0.5}
+
+                        MDTextButton:
+                            text: 'Зарегистрируйтесь.'
+                            theme_text_color: "Custom"
+                            text_color: '#083080'
+                            pos_hint: {'center_x': 0.7, 'center_y': 0.5}
+                            on_release:
+                                root.auth_screens_manager.current = 'SignUpScreen'
+
+
+
