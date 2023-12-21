@@ -33,3 +33,6 @@ class UserModel:
         with open(f'{self.path_to_data}', 'r') as file:
             users = json.load(file)
             return users
+
+    def validate_user_data(self):
+        pass

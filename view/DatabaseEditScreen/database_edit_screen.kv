@@ -1,1 +1,34 @@
 <DatabaseEditScreen>:
+    MDBoxLayout:
+        padding: '10dp'
+        spacing: '5dp'
+        orientation: 'vertical'
+        MDBoxLayout:
+            radius: 15
+            MDScreenManager:
+                id: database_tables
+                padding: '5dp'
+
+        MDBoxLayout:
+            spacing: '5dp'
+            size_hint:1,None
+            height: '50dp'
+            MDBoxLayout:
+                radius: 15
+                padding: '5dp'
+
+                MDIconButton:
+                    icon:'arrow-left'
+                    pos_hint: {'center_y': 0.5}
+                    on_release: root.controller.load_previous()
+                MDBoxLayout:
+                MDLabel:
+                    id: title
+                    text: ''
+                    halign: 'center'
+                MDBoxLayout:
+                MDIconButton:
+                    icon: 'arrow-right'
+                    pos_hint: {'center_y': 0.5}
+                    on_release: root.controller.load_next()
+

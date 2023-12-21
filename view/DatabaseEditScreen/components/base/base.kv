@@ -1,0 +1,44 @@
+<BaseModelScreen>:
+    radius: 15
+    MDBoxLayout:
+        size_hint: 1,1
+        spacing: '10dp'
+        padding: '10dp'
+        MDBoxLayout:
+            MDBoxLayout:
+                padding: '10dp'
+                spacing: '10dp'
+                orientation: 'vertical'
+                MDBoxLayout:
+                    size_hint: 1,None
+                    height: self.minimum_height
+                    spacing: '5dp'
+                    MDTextField:
+                        id: search
+                        mode: 'round'
+                        pos_hint: {'center_y': 0.5}
+                    MDIconButton:
+                        icon: 'magnify'
+                        pos_hint: {'center_y': 0.5}
+                        size_hint: None,1
+                        width: '48dp'
+                MDBoxLayout:
+                    size_hint: 1,None
+                    height: self.minimum_height
+                    spacing: '5dp'
+                    MDBoxLayout:
+                    MDIconButton:
+                        icon: 'plus'
+                        on_release: root.controller.on_press_insert()
+                    MDIconButton:
+                        icon: 'minus'
+                        on_release: root.controller.on_press_delete()
+                    MDIconButton:
+                        icon: 'feather'
+                        on_release: root.controller.on_press_update()
+                    MDIconButton:
+                        icon: 'reload'
+                        on_release: root.controller.on_press_reload()
+                    MDBoxLayout:
+                MDBoxLayout:
+                    id: datatable

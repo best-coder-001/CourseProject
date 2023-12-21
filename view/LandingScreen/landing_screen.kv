@@ -1,14 +1,13 @@
 <LandingScreen>:
     MDBoxLayout:
-        padding: '10dp'
+        padding: '15dp'
         spacing: '10dp'
 
-        MDBoxLayout:
+        MDCard:
             size_hint: None,1
             width: '70dp'
             orientation: 'vertical'
-            md_bg_color: '#0c48c2'
-
+            elevation: 0
             radius: 15
             MDBoxLayout:
             MDBoxLayout:
@@ -20,16 +19,27 @@
                 MDIconButton:
                     icon: 'account'
                     pos_hint: menu_wrapper.pos_hint
+                    on_release:
+                        root.controller.change_screens('AccountProfileScreen')
                 MDIconButton:
                     icon: 'database-edit-outline'
                     pos_hint: menu_wrapper.pos_hint
+                    on_release:
+                        root.controller.change_screens('DatabaseEditScreen')
                 MDIconButton:
                     icon: 'cog-outline'
                     pos_hint: menu_wrapper.pos_hint
+                    on_release:
+                        root.controller.change_screens('SettingsScreen')
                 MDIconButton:
                     icon: 'arrow-left'
                     pos_hint: menu_wrapper.pos_hint
+                    on_release:
+                        app.change_screens('MainScreen')
             MDBoxLayout:
         MDBoxLayout:
-            md_bg_color: '#0c48c2'
-            radius: 15
+            radius: 10
+            MDScreenManager:
+                id: landing_screen_manager
+
+
