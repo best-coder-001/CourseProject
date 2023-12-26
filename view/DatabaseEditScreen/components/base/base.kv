@@ -22,6 +22,7 @@
                         pos_hint: {'center_y': 0.5}
                         size_hint: None,1
                         width: '48dp'
+                        on_release: root.controller.on_search()
                 MDBoxLayout:
                     size_hint: 1,None
                     height: self.minimum_height
@@ -34,11 +35,12 @@
                         icon: 'minus'
                         on_release: root.controller.on_press_delete()
                     MDIconButton:
-                        icon: 'feather'
-                        on_release: root.controller.on_press_update()
-                    MDIconButton:
                         icon: 'reload'
                         on_release: root.controller.on_press_reload()
+                    MDIconButton:
+                        id: export_btn
+                        icon: 'dots-vertical'
+                        on_release: root.controller.on_press_dots_vertical()
                     MDBoxLayout:
                 MDBoxLayout:
                     id: datatable

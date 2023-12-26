@@ -1,6 +1,6 @@
 <BaseInputBox>:
     size_hint_y: None
-    height: '240'
+    height: '240dp'
     ScrollView:
         size: self.size
         MDBoxLayout:
@@ -11,23 +11,21 @@
             spacing: '10dp'
             padding: '10dp'
 
-<BaseInputScreen>:
+<BaseUpdateInputBox>:
+    size_hint_y: None
+    height: '240dp'
     ScrollView:
         size: self.size
         MDBoxLayout:
-            id: field_box
-            size_hint: 1,None
-            height: self.minimum_height
-            padding: '10dp'
+            id: field_wrapper
+            orientation: 'vertical'
+            adaptive_height: True
             spacing: '10dp'
+            padding: '10dp'
 
 
-<BaseUpdateInputBox>:
-    size_hint_y: None
-    height: '300dp'
 
-    MDCarousel:
-        size_hint:1,1
-        id: page_manager
+
+
 
 

@@ -1,8 +1,6 @@
 from model.default import session, engine
-from sqlalchemy import Column, Integer, String, ForeignKey, Time, Boolean
-from sqlalchemy.orm import DeclarativeBase,declared_attr
-from sqlalchemy import select
-
+from sqlalchemy import Column, Integer, String, ForeignKey, Time
+from sqlalchemy.orm import DeclarativeBase, declared_attr
 
 
 class Base(DeclarativeBase):
@@ -76,7 +74,7 @@ class GroupOccupancy(Base):
     period_id = Column(Integer, ForeignKey(ClassPeriod.id))
     is_numerator = Column(String)
     day_of_week = Column(String)
-    occupied = Column(String)
+    is_occupied = Column(String)
 
 
 def make_all():

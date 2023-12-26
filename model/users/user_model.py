@@ -1,5 +1,7 @@
 import json
 from pathlib import Path
+from utils.validators import UserModelValidator
+from pydantic import ValidationError
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DATA_DIR = BASE_DIR.joinpath("assets", "data")
@@ -34,5 +36,7 @@ class UserModel:
             users = json.load(file)
             return users
 
-    def validate_user_data(self):
-        pass
+    @staticmethod
+    def validate_user_data(**kw):
+        validated_data = UserModelValidator(**kw)
+        return validated_data

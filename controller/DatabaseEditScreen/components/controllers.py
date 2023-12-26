@@ -60,14 +60,14 @@ class ClassroomOccupancyScreenController(BaseModelScreenController):
 
 
 class TeacherOccupancyScreenController(BaseModelScreenController):
-    db_field_names = ['id', 'teacher_id', 'period_id', 'day_of_week',  'day_of_week','is_numerator','is_occupied']
-    prepared_field_names = ['Идентификатор', 'Код учителя', 'Код времени проведения', 'День недели', 'Числ/Знам',
-                            'Занято']
+    db_field_names = ['id', 'teacher_id', 'period_id', 'is_numerator','day_of_week','is_occupied']
+    prepared_field_names = ['Идентификатор', 'Код учителя', 'Код времени проведения','Числ/Знам', 'День недели',
+                            'Занят']
     validator = TeacherOccupancyValidator
 
 
 class GroupOccupancyScreenController(BaseModelScreenController):
     db_field_names = ['id', 'group_id', 'period_id', 'day_of_week','is_numerator','is_occupied']
     prepared_field_names = ['Идентификатор', 'Код группы', 'Код времени проведения', 'День недели', 'Числ/Знам',
-                            'Занято']
+                            'Занята']
     validator = GroupOccupancyValidator

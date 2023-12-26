@@ -1,11 +1,14 @@
 from kivymd.material_resources import dp
 from kivymd.uix.datatables import MDDataTable
+from kivymd.uix.menu import MDDropdownMenu
+
 from model.default import session
-from view.DatabaseEditScreen.components.content.content import BaseInputDialog
+from view.DatabaseEditScreen.components.content.content import BaseInputDialog, BaseUpdateInputDialog
 from .dialogs.default import ViewDialog
 from sqlalchemy import (
     insert, select, delete, update
 )
+import openpyxl
 
 
 class BaseModelScreenController:
@@ -26,14 +29,18 @@ class BaseModelScreenController:
     def on_enter(self):
         self.load_table()
 
-    def load_table(self):
-        self.view.ids.datatable.clear_widgets()
-        self.view.ids.datatable.add_widget(MDDataTable(
+    def load_table(self,row_data=None):
+        self.tbl = MDDataTable(
             use_pagination=True,
             check=True,
             row_data=self.row_data(),
-            column_data=self.column_data()
-        ))
+            column_data=self.column_data(),
+        )
+        if row_data:
+            self.tbl.row_data = row_data
+        self.tbl.bind(on_row_press=self.on_row_press)
+        self.view.ids.datatable.clear_widgets()
+        self.view.ids.datatable.add_widget(self.tbl)
 
     def table_instance(self):
         for i in self.view.ids.datatable.children:
@@ -45,6 +52,9 @@ class BaseModelScreenController:
 
     def run_input_dialog(self):
         self.input_dialog = BaseInputDialog(controller=self)
+
+    def run_input_dialog_update(self, data):
+        self.input_dialog_update = BaseUpdateInputDialog(controller=self, data=data)
 
     def row_data(self):
         return self.select()
@@ -65,15 +75,13 @@ class BaseModelScreenController:
     def json_field_names(self):
         return dict(zip(self.db_field_names, self.prepared_field_names))
 
-    def filtrate_data(self, data):
-        print([(dict(zip(self.db_field_names, i))) for i in data])
-
     def select(self):
         try:
             with session.begin():
                 return self.convert_data(session.scalars(select(self.model)).all())
-        except:
-            self.run_dialog(title='Предупреждение', msg='Ошибка загрузки данных из базы данных')
+        except Exception as e:
+            print(e)
+            self.run_dialog(title='Предупреждение', msg=f'Ошибка загрузки данных из базы данных')
             self.view_dialog.open()
             return []
 
@@ -91,16 +99,18 @@ class BaseModelScreenController:
             self.run_dialog(title='Информация', msg='Данные успешно добавлены')
             self.view_dialog.open()
 
-    def update(self, row_queryset):
+    def update(self, row):
         try:
+            validated_data = self.validate_data(dict(reversed(row.items())))
+            data = dict([(key, value) for key, value in validated_data.items()][1:])
             with session.begin():
-                ...
+                session.execute(update(self.model).where(self.model.id == validated_data['id']).values(**data))
             self.load_table()
         except:
-            self.run_dialog(title='Предупреждение', msg=f'Не удалось удалить данные,повторите снова')
+            self.run_dialog(title='Предупреждение', msg=f'Не удалось обновить данные,повторите снова')
             self.view_dialog.open()
         else:
-            self.run_dialog(title='Информация', msg='Данные успешно удалены')
+            self.run_dialog(title='Информация', msg='Данные успешно обновлены')
             self.view_dialog.open()
 
     def delete(self, row_queryset):
@@ -132,11 +142,58 @@ class BaseModelScreenController:
         else:
             self.delete(row_queryset=checked_rows)
 
-    def on_press_update(self):
-        pass
+    def on_press_dots_vertical(self):
+        menu_items = [
+            {
+                "text": f"Экспорт",
+                "viewclass": "OneLineListItem",
+                "on_release": lambda: self.export_xlsx(),
+            },
+        ]
+        self.menu = MDDropdownMenu(
+            caller=self.view.ids.export_btn,
+            items=menu_items,
+            width_mult=4,
+        )
+        self.menu.open()
 
-        # if not checked_rows:
-        #     self.run_dialog(title='Информация',msg='Выберите записи которые хотите обновить')
-        #     self.view_dialog.open()
-        # else:
-        #     self.update(row_queryset=checked_rows)
+    def export_xlsx(self):
+        file_name = self.view.name
+        folder = f'C:\\Users\\User\\OneDrive\\Рабочий стол\\Файлы эксель\\{file_name}.xlsx'
+        headers = self.prepared_field_names
+        data = self.select()
+        try:
+            book = openpyxl.Workbook()
+            sheet = book.active
+            sheet.append(headers)
+            for row in data:
+                sheet.append(row)
+            book.save(folder)
+        except:
+            self.run_dialog(title='Ошибка', msg='Ошибка экспорта,повторите попытку')
+            self.view_dialog.open()
+        else:
+            self.run_dialog(title='Информация', msg='Данные успешно экспортированы')
+            self.view_dialog.open()
+
+    def on_row_press(self, instance_table, instance_row):
+        row_num = int(instance_row.index / len(instance_table.column_data))
+        row_data = instance_table.row_data[row_num]
+        self.run_input_dialog_update(data=row_data)
+        self.input_dialog_update.open()
+
+    def search(self, row_id):
+        try:
+            row_id = int(row_id)
+            with session.begin():
+                return self.convert_data(session.scalars(select(self.model).where(self.model.id == row_id)))
+
+        except:
+            self.run_dialog(title='Информация', msg='Ничего не найдено по данному идентификатору')
+            self.view_dialog.open()
+
+    def on_search(self):
+        row_id = self.view.ids.search.text
+        self.load_table(self.search(row_id))
+
+

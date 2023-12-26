@@ -1,5 +1,6 @@
 from kivymd.uix.dialog import MDDialog
 from view.MainScreen.components.SignUpScreen.sign_up_screen import SignUpScreen
+from pydantic import ValidationError
 import re
 
 
@@ -17,75 +18,28 @@ class SignUpScreenController:
                 'password': self.view.ids.password.text,
                 'email': self.view.ids.email.text,
                 'phone_number': self.view.ids.phone_number.text}
-        flag = self.model.check_logged(**data)
+        is_logged = self.model.check_logged(**data)
 
-        if flag:
-            self.show_dialog_fail()
+        if is_logged:
+            self.show_dialog(title='Ошибка регистрации', msg='Пользователь с таким аккаунтом уже существует '
+                                                             'попробуйте подобрать другие данные!')
         else:
             try:
-                callback = self.validate_fields(**data)
-                for name in callback.keys():
-                    if not callback[name]:
-                        raise Exception()
-            except:
-                self.validation_fail_dialog()
+                self.validate_fields(**data)
+            except ValidationError as e:
+                text = ','.join([i['msg'].replace('Value error,','') for i in e.errors()]).capitalize()
+                self.show_dialog(title='Ошибка валидации', msg=str(text))
             else:
                 self.model.append_user(**data)
-                self.show_dialog_success()
+                self.show_dialog(title='Успешная регистрация', msg='Добро пожаловать!')
                 self.view.manager_screens.current = 'LandingScreen'
 
-    def show_dialog_success(self):
+    def show_dialog(self, title, msg):
         if not self.dialog:
-            self.dialog = MDDialog(title='Успешная регистрация',
-                                   text='Регистрация была успешно произведена!'
-                                   )
-        self.dialog.open()
-
-    def show_dialog_fail(self):
-        if not self.dialog:
-            self.dialog = MDDialog(title='Ошибка регистрации',
-                                   text='Что то пошло не так,такой пользователь уже существует!'
+            self.dialog = MDDialog(title=title,
+                                   text=msg
                                    )
         self.dialog.open()
 
     def validate_fields(self, **kw):
-        callback = {
-            'username': False,
-            'password': False,
-            'email': False,
-            'phone_number': False
-        }
-        if len(kw['username']) >= 5:
-            callback['username'] = True
-
-        if len(kw['password']) >= 8:
-            callback['password'] = True
-
-        if self.validate_email(kw['email']):
-            callback['email'] = True
-
-        if self.validate_phone_number(kw['phone_number']):
-            callback['phone_number'] = True
-
-        return callback
-
-    def validate_email(self, email):
-        pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-        if re.match(pattern, email):
-            return True
-        else:
-            return False
-
-    def validate_phone_number(self, phone_number):
-        pattern = r'^(?:\+7|8)-\d{3}-\d{3}-\d{4}$'
-        if re.match(pattern, phone_number):
-            return True
-        else:
-            return False
-
-    def validation_fail_dialog(self):
-        if not self.dialog:
-            self.dialog = MDDialog(title='Неправильно введеные данные',
-                                   text='Что то пошло не так,в какое то поле были введены неправильные данные!'
-                                   )
-        self.dialog.open()
+        self.model.validate_user_data(**kw)

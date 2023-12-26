@@ -1,1 +1,96 @@
 <AccountProfileScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDBoxLayout:
+            padding: '5dp'
+            spacing: '5dp'
+            size_hint_y: None
+            height: '70dp'
+            MDBoxLayout:
+
+            MDBoxLayout:
+                padding: '5dp'
+                spacing: "10dp"
+                size_hint_x: None
+                width: '250dp'
+                MDIconButton:
+                    icon: 'bell-outline'
+                MDBoxLayout:
+
+                    MDBoxLayout:
+                        radius: 20
+                        Image:
+                            source: 'default.jpg'
+                            allow_stretch: True
+                            pos_hint: {'center_y': 0.5,'center_x': 0.5}
+
+                MDLabel:
+                    text:"Hello Rasul"
+                    halign: 'center'
+
+
+
+
+
+
+        MDBoxLayout:
+            padding: '10dp'
+            spacing: '10dp'
+            MDCard:
+                adaptive_width: True
+                width: '300dp'
+                elevation: 3
+                shadow_softness: 12
+
+                MDBoxLayout:
+                    padding: '10dp'
+                    spacing: '10dp'
+                    orientation: 'vertical'
+                    MDBoxLayout:
+                        adaptive_height:True
+                        height: '150dp'
+                        radius: 10
+                        Image:
+                            source: 'default.jpg'
+                            radius: self.parent.radius
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        padding: '5dp'
+                        spacing: '10dp'
+                        MDLabel:
+                            halign: 'left'
+                            bold: True
+                            font_size: '25dp'
+                            text: "Мой профиль"
+                            size_hint_y: None
+                            height: '30dp'
+                        MDBoxLayout:
+                            orientation: 'vertical'
+                            padding: '5dp'
+                            spacing: '10dp'
+
+                            MDTextField:
+                                text: 'lolo.lol.02@list.ru'
+                            MDTextField:
+                                text: "87085480859"
+
+                            MDAnchorLayout:
+                                MDFillRoundFlatButton:
+                                    text: 'Сохранить'
+                                    anchor_y: 'center'
+                                    anchor_x: 'center'
+                                    font_size: '20dp'
+#                                    md_bg_color: ['#ab1611','#2d65cc']
+
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: '5dp'
+                spacing: '10dp'
+
+                MDCard:
+                    elevation: 3
+                    shadow_softness: 12
+                MDCard:
+                    elevation: 3
+                    shadow_softness: 12
+

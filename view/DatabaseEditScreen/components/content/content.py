@@ -45,25 +45,31 @@ class BaseInputDialog:
 
 
 class BaseUpdateInputBox(MDBoxLayout):
-    def __init__(self, controller, *args, **kwargs):
+    def __init__(self, controller, data, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.controller = controller
+        self.load_fields(data)
 
+    def load_fields(self, data):
+        self.ids.field_wrapper.clear_widgets()
+        fields = [MDTextField(id=key, hint_text=value, mode='rectangle') for key, value in
+                  self.controller.json_field_names().items()]
+        for i in range(len(fields)):
+            fields[i].text = str(data[i])
+            self.ids.field_wrapper.add_widget(fields[i])
+    def get_data(self):
+        return dict([(i.id, i.text) for i in self.ids.field_wrapper.children])
 
-class BaseInputScreen(MDBoxLayout):
-    def __init__(self,controller, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.controller = controller
-        
 
 class BaseUpdateInputDialog:
-    def __init__(self, controller, title=None, text=None):
+    def __init__(self, controller, data, title=None, text=None):
         self.controller = controller
         self.dialog = MDDialog(
             type='custom',
-            content_cls=BaseUpdateInputBox(controller=self.controller),
+            content_cls=BaseUpdateInputBox(controller=self.controller, data=data),
             buttons=[
                 MDFlatButton(text='ЗАКРЫТЬ', on_release=self.close),
+                MDFlatButton(text='ОБНОВИТЬ', on_release=self.on_release_update),
             ]
         )
 
@@ -72,3 +78,6 @@ class BaseUpdateInputDialog:
 
     def close(self, obj):
         self.dialog.dismiss()
+
+    def on_release_update(self, btn):
+        self.controller.update(self.dialog.content_cls.get_data())
